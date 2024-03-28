@@ -36,6 +36,14 @@ public abstract class ShooterBase extends PersonBase {
         this.level = 1;
     }
 
+    public int getAmmo() {
+        return ammo;
+    }
+
+    public void setAmmo(int ammo) {
+        this.ammo = ammo;
+    }
+
     /**
      * Атака противника
      *
@@ -43,7 +51,7 @@ public abstract class ShooterBase extends PersonBase {
      */
     protected void shot(PersonBase target)
     {
-        System.out.print(" Стреляет по " + target);
+//        System.out.print(" Стреляет по " + target);
         ammo--;
         float dist = position.distanceTo(target.position);
         int damage = getRound(power, 10) + (power / 10) * level;
@@ -58,19 +66,19 @@ public abstract class ShooterBase extends PersonBase {
             damage *= 2.0f;
         }
         int res = target.getDamage(damage);
-        if (res > 0)
-        {
-            if (critical)
-                System.out.print(" и наносит критический удар в " + res + " повреждений!");
-            else
-                System.out.print(" и наносит " + res + " повреждений.");
-        } else {
-            System.out.print(", но " + target.name + " увернулся!");
-        }
-        if (target.health <= 0)
-        {
-            System.out.print("\n" + target + " вышел из чата!");
-        }
+//        if (res > 0)
+//        {
+//            if (critical)
+//                System.out.print(" и наносит критический удар в " + res + " повреждений!");
+//            else
+//                System.out.print(" и наносит " + res + " повреждений.");
+//        } else {
+//            System.out.print(", но " + target.name + " увернулся!");
+//        }
+//        if (target.health <= 0)
+//        {
+//            System.out.print("\n" + target + " вышел из чата!");
+//        }
     }
 
     /**
@@ -83,10 +91,10 @@ public abstract class ShooterBase extends PersonBase {
     {
         if (health <= 0 || ammo <= 0)
         {
-            if (ammo <= 0)
-            {
-                System.out.print(name + ": " + "подайте стрел!");
-            }
+//            if (ammo <= 0)
+//            {
+//                System.out.print(name + ": " + "подайте стрел!");
+//            }
             return;
         }
         PersonBase target = this.findNearestPerson(enemies);

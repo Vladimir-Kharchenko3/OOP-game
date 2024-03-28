@@ -26,14 +26,6 @@ public class CoordXY {
     /*
         Геттеры и сеттеры
      */
-    public void setX(int curX) {
-        this.curX = curX;
-    }
-
-    public void setY(int curY) {
-        this.curY = curY;
-    }
-
     public void setXY(int x, int y)
     {
         curX = x;
@@ -64,6 +56,12 @@ public class CoordXY {
         return height;
     }
 
+
+    public void increment(int dx, int dy)
+    {
+        curX += dx;
+        curY += dy;
+    }
     /**
      * Проверка на возможность хода на заданную позицию
      *
@@ -74,20 +72,6 @@ public class CoordXY {
     public boolean isMove(int x, int y)
     {
         return x >= 0 && x < width && y >= 0 && y < height;
-    }
-
-    /**
-     * Ходим в заданном направлении
-     * @param dx Направление по оси X (-1, +1)
-     * @param dy Направление по оси Y (-1, +1)
-     */
-    public void moveTo(int dx, int dy)
-    {
-        if (isMove(curX+dx, curY+dy))
-        {
-            curX += dx;
-            curY += dy;
-        }
     }
 
     /**
@@ -103,23 +87,35 @@ public class CoordXY {
         return (float) Math.sqrt(x*x + y*y);
     }
 
+    public float fastDistance(CoordXY target, int dx, int dy)
+    {
+        float tx = curX+dx - target.getX();
+        float ty = curY+dy - target.getY();
+        return (tx*tx + ty*ty);
+    }
+
+    /**
+     * Возвращает разницу координат
+     * @param to
+     * @return
+     */
+    public CoordXY getDelta(CoordXY to)
+    {
+        return new CoordXY(to.curX-curX, to.curY-curY);
+    }
+
+    /**
+     * Сравнение координат
+     * @param to Проверяемые координаты
+     * @return true если равны
+     */
+    public boolean equal(CoordXY to)
+    {
+        return curX == to.curX && curY == to.curY;
+    }
 
     public String toString()
     {
         return curX + ":" + curY;
-    }
-    public CoordXY getDelta(CoordXY target){
-        return new CoordXY
-                (target.getX() - getX(), target.getY() - getY());
-    }
-
-    public  boolean check(CoordXY pt){
-
-        return curX == pt.curX && curY == pt.curY;
-    }
-
-    public void add(int dx, int dy) {
-        curX += dx;
-        curY += dy;
     }
 }
