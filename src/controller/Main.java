@@ -1,7 +1,6 @@
 
 package controller;
 
-
 import behavior.CoordXY;
 import behavior.HeroesNames;
 import person.*;
@@ -20,25 +19,26 @@ public class Main {
     public static void main(String[] args) {
         createTeam(greenPersons, 10, 0);
         createTeam(bluePersons, 10, 3);
+//        setDied(greenPersons,5);
+//        setManas(greenPersons,30);
         allPersons.addAll(bluePersons);
         allPersons.addAll(greenPersons);
 //        all.sort(new PrioritySort());
         allPersons.sort((o1, o2) -> Integer.compare(o2.priority, o1.priority));
 
-//        for (int i = 0; i < 30; i++) {
         Scanner in = new Scanner(System.in);
         while (true)
         {
             View.view();
+
             for (PersonBase p : allPersons) {
-//                System.out.print(p + " ходит. ");
                 if (greenPersons.contains(p)) {
                     p.step(bluePersons, greenPersons);
 
                 } else {
                     p.step(greenPersons, bluePersons);
                 }
-//                System.out.println();
+                System.out.println(p.getInfo());
             }
             in.nextLine();
             if (!isLiving(greenPersons))
@@ -63,6 +63,27 @@ public class Main {
                 return true;
         }
         return false;
+    }
+
+    public static void setDied(ArrayList<PersonBase> team, int num)
+    {
+        for (PersonBase p : team) {
+            if (p instanceof Wizard || p instanceof Monk)
+                continue;
+            p.healed(-p.getHealth());
+            num--;
+            if (num <= 0)
+                break;
+        }
+    }
+    public static void setManas(ArrayList<PersonBase> team, int mana)
+    {
+        for (PersonBase p : team) {
+            if (p instanceof Wizard || p instanceof Monk)
+            {
+                ((MagicianBase) p).setMana(mana);
+            }
+        }
     }
 
     public static void createTeam(ArrayList<PersonBase> team, int num, int start)

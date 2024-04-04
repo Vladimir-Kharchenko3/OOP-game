@@ -17,7 +17,7 @@ public abstract class PersonBase implements ActionInterface {
 
     protected String name;
     public int priority;                 // приоритет хода
-    protected int health;                   // здоровье
+    protected int health;                   // здоровье (0 - убит, -1 - ждет восстановления)
     protected final int maxHealth;
     protected final int power;              //
     protected final int agility;            // ловкость
@@ -55,6 +55,14 @@ public abstract class PersonBase implements ActionInterface {
 
     public int getHealth() {
         return health;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public int getPriority() {
+        return priority;
     }
 
     /**
@@ -147,6 +155,11 @@ public abstract class PersonBase implements ActionInterface {
             }
         }
         return target;
+    }
+
+    @Override
+    public String getInfo() {
+        return this.toString() + history;
     }
 
 //    @Override

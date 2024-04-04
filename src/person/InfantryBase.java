@@ -40,7 +40,7 @@ public abstract class InfantryBase extends PersonBase {
     {
         for (PersonBase p : persons)
         {
-            if (p.position.equal(pos))
+            if (p.getHealth() > 0 && p.position.equal(pos))
                 return false;
         }
         return true;
@@ -73,8 +73,9 @@ public abstract class InfantryBase extends PersonBase {
 
         position.increment(px[minIdx], py[minIdx]);
 
-        history = "move to " + position;
+        history = String.format(" пошёл на (%s)", position.toString());
     }
+
 
     private void attack(PersonBase target, boolean isMoved)
     {
@@ -88,7 +89,18 @@ public abstract class InfantryBase extends PersonBase {
             damage /= 2;                        // удар с хода
 
         int res = target.getDamage(damage);
-        history = history + "attack " + target.name + " set " + res + "damage";
+        history = String.format(" атаковал %s ", target);
+        if (res == 0)
+        {
+            history += "но он увернулся!";
+        } else {
+            history += "и нанёс ";
+            if (critical)
+            {
+                history += "критический ";
+            }
+            history += "урон в " + res;
+        }
     }
 
     @Override

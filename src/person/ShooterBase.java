@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public abstract class ShooterBase extends PersonBase {
 
     protected int ammo;                         // боеприпасов в наличии
+    protected int maxAmmo;
     protected int level;                        // уровень (зависит от опыта и даёт увеличение урона)
     protected int effectiveDistance;            // макс. дальность эффективной стрельбы
 
@@ -32,18 +33,24 @@ public abstract class ShooterBase extends PersonBase {
     {
         super(name, priority, health, power, agility, defence, distance, pos);
         this.ammo = ammo;
+        this.maxAmmo = ammo;
         this.effectiveDistance = effectiveDistance;
         this.level = 1;
     }
+
 
     public int getAmmo() {
         return ammo;
     }
 
-    public void setAmmo(int ammo) {
-        this.ammo = ammo;
+    public int getMaxAmmo() {
+        return maxAmmo;
     }
 
+    protected void setAmmo(int ammo)
+    {
+        this.ammo = Math.min(ammo, maxAmmo);
+    }
     /**
      * Атака противника
      *
@@ -51,7 +58,6 @@ public abstract class ShooterBase extends PersonBase {
      */
     protected void shot(PersonBase target)
     {
-//        System.out.print(" Стреляет по " + target);
         ammo--;
         float dist = position.distanceTo(target.position);
         int damage = getRound(power, 10) + (power / 10) * level;
@@ -66,19 +72,19 @@ public abstract class ShooterBase extends PersonBase {
             damage *= 2.0f;
         }
         int res = target.getDamage(damage);
-//        if (res > 0)
-//        {
-//            if (critical)
-//                System.out.print(" и наносит критический удар в " + res + " повреждений!");
-//            else
-//                System.out.print(" и наносит " + res + " повреждений.");
-//        } else {
-//            System.out.print(", но " + target.name + " увернулся!");
-//        }
-//        if (target.health <= 0)
-//        {
-//            System.out.print("\n" + target + " вышел из чата!");
-//        }
+
+        history = String.format(" атаковал %s ", target);
+        if (res == 0)
+        {
+            history += "но он увернулся!";
+        } else {
+            history += "и нанёс ";
+            if (critical)
+            {
+                history += "критический ";
+            }
+            history += "урон в " + res;
+        }
     }
 
     /**
@@ -89,18 +95,20 @@ public abstract class ShooterBase extends PersonBase {
     @Override
     public void step(ArrayList<PersonBase> enemies, ArrayList<PersonBase> friends)
     {
-        if (health <= 0 || ammo <= 0)
-        {
-//            if (ammo <= 0)
-//            {
-//                System.out.print(name + ": " + "подайте стрел!");
-//            }
+        history = "";
+
+        if (health <= 0)
             return;
-        }
-        PersonBase target = this.findNearestPerson(enemies);
-        if (target != null)
+
+        if (ammo > 0)
         {
-            shot(target);
+            PersonBase target = this.findNearestPerson(enemies);
+            if (target != null)
+            {
+                shot(target);
+            }
+        } else {
+            history = String.format(" ждёт подвоза стрел.");
         }
     }
 

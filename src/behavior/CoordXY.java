@@ -94,15 +94,6 @@ public class CoordXY {
         return (tx*tx + ty*ty);
     }
 
-    /**
-     * Возвращает разницу координат
-     * @param to
-     * @return
-     */
-    public CoordXY getDelta(CoordXY to)
-    {
-        return new CoordXY(to.curX-curX, to.curY-curY);
-    }
 
     /**
      * Сравнение координат
